@@ -10,7 +10,7 @@ import Update,Data1
 import Cluster, Discretization
 import Optimize as optimize
 
-def test_nums():
+def test_nums(src):
     val = Num()
     val1 = Num()
     for i in range(1000):
@@ -23,7 +23,7 @@ def test_nums():
     return .578 == Misc.rnd(val.mid()) and val.mid()> val1.mid() 
 
 
-def test_sym():
+def test_sym(src):
     value = ['a', 'a', 'a', 'a', 'b', 'b', 'c']
     sym1 = Sym()
     for x in value:
@@ -40,15 +40,16 @@ def readCSV(sFilename, fun):
             fun(line)
 
 
-def test_csv():
+def test_csv(src):
 
     global n
     def fun(t):
         n += len(t)
-    root = str(Path(__file__).parent.parent.parent)
-    csv_path = os.path.join(root, "etc/data/auto93.csv")
+    root = str(Path(__file__).parent.parent)
+    csv_path = os.path.join(root, src)
     if(csv_content(csv_path) == 8 * 399):
         print("\n Test csv : successful \n")
+    print(src)
     return csv_content(csv_path) == 8 * 399
 
 def csv_content(src):
@@ -60,9 +61,9 @@ def csv_content(src):
         return l
 
 
-def test_data():
-    root = str(Path(__file__).parent.parent.parent)
-    csv_path = os.path.join(root, "etc/data/auto93.csv")
+def test_data(src):
+    root = str(Path(__file__).parent.parent)
+    csv_path = os.path.join(root, src)
     data1 = Data()
 
     data = data1.read_file(csv_path)
@@ -74,9 +75,9 @@ def test_data():
 
 
 
-def test_clone():
-    root = str(Path(__file__).parent.parent.parent)
-    csv_path = os.path.join(root, "etc/data/auto93.csv")
+def test_clone(src):
+    root = str(Path(__file__).parent.parent)
+    csv_path = os.path.join(root, src)
     data = Data()
     data1 = data.read_file(csv_path)
     data2 = data1.clone(data1,data1.rows)
@@ -85,14 +86,14 @@ def test_clone():
     Misc.oo(Query.stats(data2))
     return True
 
-def test_the():
+def test_the(src):
     print("\nTest the : successful \n")
     print(str(the))
     return True
 
-def test_half():
-    root = str(Path(__file__).parent.parent.parent)
-    csv_path = os.path.join(root, "etc/data/auto93.csv")
+def test_half(src):
+    root = str(Path(__file__).parent.parent)
+    csv_path = os.path.join(root, src)
     data1 = Data()
     data = data1.read_file(csv_path)
 
@@ -103,7 +104,7 @@ def test_half():
     print(Misc.o(B))
     return True
 
-def test_cliffs():
+def test_cliffs(src):
     if Misc.cliffs_delta([8, 7, 6, 2, 5, 8, 7, 3], [8, 7, 6, 2, 5, 8, 7, 3]):
         return False
     if not Misc.cliffs_delta([8, 7, 6, 2, 5, 8, 7, 3], [9, 9, 7, 8, 10, 9, 6]):
@@ -126,9 +127,9 @@ def test_cliffs():
     print("\nTest cliff : successful \n")
     return True
 
-def test_dist():
-    root = str(Path(__file__).parent.parent.parent)
-    csv_path = os.path.join(root, "etc/data/auto93.csv")
+def test_dist(src):
+    root = str(Path(__file__).parent.parent)
+    csv_path = os.path.join(root, src)
     data1 = Data()
 
     data = data1.read_file(csv_path)
@@ -139,9 +140,9 @@ def test_dist():
     print({"lo": num.lo, "hi": num.hi, "mid": Misc.rnd(Query.mid(num)), "div": Misc.rnd(num.n)})
     return True
 
-def test_tree():
-    root = str(Path(__file__).parent.parent.parent)
-    csv_path = os.path.join(root, "etc/data/auto93.csv")
+def test_tree(src):
+    root = str(Path(__file__).parent.parent)
+    csv_path = os.path.join(root, src)
     data1 = Data()
 
     data = data1.read_file(csv_path)
@@ -151,10 +152,10 @@ def test_tree():
     return True
 
 
-def test_sway():
+def test_sway(src):
   
-    root = str(Path(__file__).parent.parent.parent)
-    csv_path = os.path.join(root, "etc/data/auto93.csv")
+    root = str(Path(__file__).parent.parent)
+    csv_path = os.path.join(root, src)
     data1 = Data()
     data = data1.read_file(csv_path)
     best, rest, evals = optimize.sway(data)
@@ -173,9 +174,9 @@ def test_sway():
 
 
 
-def test_bins():
-    root = str(Path(__file__).parent.parent.parent)
-    csv_path = os.path.join(root, "etc/data/auto93.csv")
+def test_bins(src):
+    root = str(Path(__file__).parent.parent)
+    csv_path = os.path.join(root, src)
     data1 = Data()
 
     data = data1.read_file(csv_path)
@@ -189,9 +190,9 @@ def test_bins():
     print("\nTest bin : successful \n")
     return  True 
 
-def test_explain():
-    root = str(Path(__file__).parent.parent.parent)
-    csv_path = os.path.join(root, "etc/data/auto93.csv")
+def test_explain(src):
+    root = str(Path(__file__).parent.parent)
+    csv_path = os.path.join(root, src)
     data = Data1.Data1(csv_path)
     best, rest , evals = optimize.sway(data)
 

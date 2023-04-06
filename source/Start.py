@@ -3,6 +3,7 @@ from Examples import *
 
 argumentList = sys.argv[1:]
 the = {"seed": 937162211, "dump": False, "halves":"", "reuse":True , "go": "data", "help": False, "file": "/etc/data/repgrid1.csv","min": "min", "rest":4}
+
 b4={}
 ENV = {}
 for k,v in ENV:
@@ -33,12 +34,12 @@ def help():
     print(a)
 
 
-def run_tests():
+def run_tests(src):
     func_pass= 0
     test_suite = [test_nums, test_sym,test_the, test_half, test_csv, test_data,  test_clone, test_cliffs, test_tree,  test_dist, test_csv, test_sway, test_bins, test_explain] 
-    # test_suite = [test_explain]
+    # test_suite = [test_nums, test_sym, test_csv]
     for i,test in enumerate(test_suite):
-        if(test()):
+        if(test(src)):
             func_pass += 1
     print("\nTotal Test Cases Passing: " + str(func_pass) + "\nTotal Test Cases Failing: " + str(len(test_suite)-func_pass))
     
@@ -50,7 +51,8 @@ def main():
              if currentArgument in ('-h', ''):
                 help()
              if currentArgument in ("-g", ''):
-               run_tests() 
+                src = input()
+                run_tests(src) 
                 
     except getopt.error as err:
         print (str(err))
