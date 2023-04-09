@@ -1,8 +1,9 @@
+#  -------------------Done--------------------
 from Col import *
 
 class COLS:
     def __init__(self, ss):
-        
+      
         self.names = ss
         self.all = []
         self.x = []
@@ -13,11 +14,16 @@ class COLS:
             self.all.append(col)
 
             if not col.isIgnored:
-                if col.isKlass:
-                    col.isKlass = col
+                # if col.isKlass
+                if col.isKlass and hasattr(col, 'isKlass'):
+                    # col.isKlass = col
+                    self.klass = col
 
                 if col.isGoal:
                     self.y.append(col)
                 else:
                     self.x.append(col)
-    
+
+
+       
+      

@@ -1,3 +1,4 @@
+#  --------------- Done ----------------------
 from Num import *
 from Sym import *
 import re
@@ -11,5 +12,6 @@ class COL:
         self.isGoal = self.col.txt[-1] in ["!", "+", "-"]
 
 
-     
+
+
     

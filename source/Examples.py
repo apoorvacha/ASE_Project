@@ -6,7 +6,7 @@ from Data import *
 import Misc
 from pathlib import Path
 import os , csv
-import Update,Data1
+import Update
 import Cluster, Discretization
 import Optimize as optimize
 
@@ -64,9 +64,9 @@ def csv_content(src):
 def test_data(src):
     root = str(Path(__file__).parent.parent)
     csv_path = os.path.join(root, src)
-    data1 = Data()
+    data = Data(csv_path)
 
-    data = data1.read_file(csv_path)
+    # data = data1.read_file(csv_path)
     col = data.cols.x[1].col
     print("\nTest data : successful \n")
     print(col.lo,col.hi, Query.mid(col), Query.div(col))
@@ -78,11 +78,13 @@ def test_data(src):
 def test_clone(src):
     root = str(Path(__file__).parent.parent)
     csv_path = os.path.join(root, src)
-    data = Data()
-    data1 = data.read_file(csv_path)
-    data2 = data1.clone(data1,data1.rows)
+    data = Data(csv_path)
+    # data1 = data.read_file(csv_path)
+   
+    data2 = Data(data, data.rows)
+    # data2 = data.clone(data,data.rows)
     print("\nTest clone : successful \n")
-    Misc.oo(Query.stats(data1))
+    Misc.oo(Query.stats(data))
     Misc.oo(Query.stats(data2))
     return True
 
@@ -94,8 +96,9 @@ def test_the(src):
 def test_half(src):
     root = str(Path(__file__).parent.parent)
     csv_path = os.path.join(root, src)
-    data1 = Data()
-    data = data1.read_file(csv_path)
+
+    data = Data(csv_path)
+    # data = data1.read_file(csv_path)
 
     left, right, A, B, c , evals= Cluster.half(data)
     print("\nTest half : successful \n")
@@ -103,6 +106,8 @@ def test_half(src):
     print(Misc.o(A), c)
     print(Misc.o(B))
     return True
+  
+    
 
 def test_cliffs(src):
     if Misc.cliffs_delta([8, 7, 6, 2, 5, 8, 7, 3], [8, 7, 6, 2, 5, 8, 7, 3]):
@@ -130,9 +135,9 @@ def test_cliffs(src):
 def test_dist(src):
     root = str(Path(__file__).parent.parent)
     csv_path = os.path.join(root, src)
-    data1 = Data()
+    data = Data(csv_path)
 
-    data = data1.read_file(csv_path)
+    # data = data1.read_file(csv_path)
     num = Num()
     for row in data.rows:
         Update.add(num, Query.dist(data, row, data.rows[1]))
@@ -143,9 +148,9 @@ def test_dist(src):
 def test_tree(src):
     root = str(Path(__file__).parent.parent)
     csv_path = os.path.join(root, src)
-    data1 = Data()
+    data = Data(csv_path)
 
-    data = data1.read_file(csv_path)
+    # data = data1.read_file(csv_path)
     print("\nTest tree : successful \n")
     Cluster.show_tree(Cluster.tree(data))
 
@@ -156,8 +161,8 @@ def test_sway(src):
   
     root = str(Path(__file__).parent.parent)
     csv_path = os.path.join(root, src)
-    data1 = Data()
-    data = data1.read_file(csv_path)
+    data = Data(csv_path)
+    # data = data1.read_file(csv_path)
     best, rest, evals = optimize.sway(data)
     print(Misc.o(Query.stats(data)))
     print("\nall ", Misc.o(Query.stats(data)))
@@ -177,9 +182,9 @@ def test_sway(src):
 def test_bins(src):
     root = str(Path(__file__).parent.parent)
     csv_path = os.path.join(root, src)
-    data1 = Data()
+    data= Data(csv_path)
 
-    data = data1.read_file(csv_path)
+    # data = data1.read_file(csv_path)
     best, rest , evals= optimize.sway(data)
     print("all","","","",Misc.o({"best":len(best.rows), "rest": len(rest.rows)}))
     for k,t in enumerate(Discretization.bins(data.cols.x, {"best": best.rows, "rest": rest.rows})):
@@ -193,20 +198,20 @@ def test_bins(src):
 def test_explain(src):
     root = str(Path(__file__).parent.parent)
     csv_path = os.path.join(root, src)
-    data = Data1.Data1(csv_path)
+    # data = Data1.Data1(csv_path)
+    data = Data(csv_path)
     best, rest , evals = optimize.sway(data)
 
     rule, most= Discretization.xpln(data,best,rest)
     print("\n-----------\n\nexplain=", Discretization.showRule(rule))
-    data1= Data1.Data1(data,Discretization.selects(rule,data.rows))
+   
+    data1= Data(data,Discretization.selects(rule,data.rows))
     print("all               ",Query.stats(data),Query.stats(data,Query.div))
     print(f"sway with {evals} evals",Query.stats(best),Query.stats(best,Query.div))
     print(f"xpln on {evals} evals",Query.stats(data1),Query.stats(data1,Query.div))
     top, _ = Query.betters(data, len(best.rows))
-    # top = Data1(data,top)
-    # print(f"sort with {len(data.rows)} evals", Query.stats(top),Query.stats(top,Query.div))
-
+    top = Data(data, top)
+    print(f"sort with {len(data.rows)} evals", Query.stats(top), Query.stats(top, Query.div))
     print("\nTest explain : successful \n")
-    return True 
-
+    return True
 

@@ -1,6 +1,7 @@
 import List, Query
 from Start import the
 from Cluster import half
+import Data
 
 
 
@@ -17,5 +18,6 @@ def sway(data):
             return worker(l, worse,evals+evals0, A)
 
       best, rest , evals = worker(data.rows, [], 0)
-      return data.clone(data, best), data.clone(data, rest), evals
+      return Data.Data(data, best), Data.Data(data, rest), evals
+    #   return data.clone(data, best), data.clone(data, rest), evals
 

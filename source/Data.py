@@ -16,22 +16,22 @@ def csv_content(src):
 
 
 class Data:
-    def __init__(self):
-         self.cols = None
-         self.rows = []
+    # def __init__(self):
+    #      self.cols = None
+    #      self.rows = []
 
-    # def __init__(self, src, rows = None):
-    #     self.cols = None
-    #     self.rows = []
-    #     add = lambda t: Update.row(self, t)
-    #     if isinstance(src, str):
-    #         Examples.readCSV(src, add)
-    #     else:
-    #         self.cols = COLS(src.cols.names)
-    #         if rows:
-    #             for row in rows:
-    #                 add(row)
 
+    def __init__(self, src, rows = None):
+        self.rows = []
+        self.cols = None
+        add = lambda t: Update.row(self, t)
+        if isinstance(src, str):
+            Examples.readCSV(src, add)
+        else:
+            self.cols = COLS(src.cols.names)
+            if rows:
+                for row in rows:
+                    add(row)
 
     def read_file(self, content):
         data = Data()
@@ -39,9 +39,18 @@ class Data:
         Examples.readCSV(content, callback_function)
         return data
 
+
+
     def clone(self, data, ts=None):
         data1 = Update.row(Data(), data.cols.names)
-        for t in ts or []:
+        # for t in ts or []:
+        for t in (ts or []):
             Update.row(data1, t)
         return data1
+
+
+
+# 
+# 
+# 
 

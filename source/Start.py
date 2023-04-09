@@ -2,7 +2,7 @@ import sys, getopt
 from Examples import *
 
 argumentList = sys.argv[1:]
-the = {"seed": 937162211, "dump": False, "halves":"", "reuse":True , "go": "data", "help": False, "file": "/etc/data/repgrid1.csv","min": "min", "rest":4}
+the = {"seed": 937162211, "dump": False, "halves":"", "reuse":False , "go": "data", "help": False, "file": "/etc/data/repgrid1.csv","min": "min", "rest":4}
 
 b4={}
 ENV = {}
