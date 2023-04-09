@@ -11,7 +11,7 @@ Hrushabhsingh Chouhan, Vasu Agrawal, Apoorva Chauhan
 
 
 ## Instructions to run the project 
-Inside the src folder there are files for all the project which contains a Start.py for all the tst cases.  To run the Project follow the steps given below
+Inside the src folder there are files for all the project which contains a Start.py for all the test cases.  To run the Project follow the steps given below
 1. Clone the repository
 2. Navigate to the source folder in the ASE_project from terminal that needs to execute using <br>
 cd source <br>
