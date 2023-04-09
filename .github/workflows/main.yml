@@ -27,7 +27,7 @@ jobs:
     
     - name: Test with pytest
       run: |
-          cd src/HW5
+          cd source
           pip install pytest
           pip install pytest-cov
           pytest Examples.py
