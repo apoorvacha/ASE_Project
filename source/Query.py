@@ -1,5 +1,5 @@
 # -- ## Query
-import math
+import math, Sym
 from List import *
 
 
@@ -49,13 +49,15 @@ def stats(data, fun = None, cols = None, nPlaces = 1):
 
 def norm(num, n):
     max = float('inf')
-    if(n == '?'):
-        return n 
-    else :
-        return (float(n)-num.lo) / (num.hi - num.lo + 1 / max)
+    
+    try:
+        if(n == '?'):
+            return n     
+        else: 
+            return (float(n)-num.lo) / (num.hi - num.lo + 1 / max)
 
-
-
+    except:
+        return 0
 
 
 def dist(data, row1, row2, cols=None):
@@ -122,7 +124,7 @@ def better(data,row1,row2, s1 =0, s2 =0):
     for _,col in enumerate(ys) :
         x = norm(col.col, row1[col.col.at])
         y = norm(col.col, row2[col.col.at])
-
+        # print("txt in btter",col.col.txt)
         s1 = s1 - math.exp(col.col.w * (x - y) / len(ys))
         s2 = s2 - math.exp(col.col.w * (y - x) / len(ys))
     return s1/len(ys) < s2/len(ys) 

@@ -162,6 +162,7 @@ def test_sway(src):
     root = str(Path(__file__).parent.parent)
     csv_path = os.path.join(root, src)
     data = Data(csv_path)
+
     # data = data1.read_file(csv_path)
     best, rest, evals = optimize.sway(data)
     print(Misc.o(Query.stats(data)))

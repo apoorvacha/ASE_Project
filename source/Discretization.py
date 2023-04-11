@@ -26,9 +26,13 @@ def bins(cols, rowss):
                 x = row[col.at]
 
                 if x != '?':
-                    k = int(bin(col, float(x) if x != "?" else x ))
-                    ranges[k] = ranges[k] if k in ranges else RANGE(col.at, col.txt, float(x) if x != "?" else x)
-                    upd.extend(ranges[k], float(x), y)
+                    res = bin(col, float(x) if x != "?" and not hasattr(col, "isSym") else x )
+                    if isinstance(res,str):
+                        k = res
+                    else:
+                        k = int(res)
+                    ranges[k] = ranges[k] if k in ranges else RANGE(col.at, col.txt, float(x) if x != "?" and not hasattr(col, "isSym") else x)
+                    upd.extend(ranges[k], float(x) if x != "?" and not hasattr(col, "isSym") else x, y)
         ranges = {key: value for key, value in sorted(ranges.items(), key=lambda x: x[1].lo)}
         newRanges = {}
         out = []
@@ -62,9 +66,13 @@ def mergeAny(ranges0):
     def noGaps(t):
         for j in range(1, len(t)):
             t[j].lo = t[j-1].hi
-        t[0].lo = min
-        t[-1].hi = max
-        return t
+       
+        try:
+            t[0].lo = min
+            t[-1].hi = max
+            return t
+        except:
+            return t
 
     ranges1, j = [], 0
     while j < len(ranges0):

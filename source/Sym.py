@@ -10,6 +10,7 @@ class Sym:
         self.has = {}
         self.isSym = True
         self.mode = None
+        # self.w = -1 if '-' in self.txt else 1 
 
     def add(self, x):
         if x != '?':

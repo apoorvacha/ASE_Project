@@ -19,8 +19,9 @@ def half(data, rows= None, cols = None ,above = None):
     
     rows =  rows or data.rows
     some = List.many(rows,512)
+    
     A    = above or List.any(some)
-
+    
     tmp = sorted([{"row": r, "d": gap(r, A)} for r in some], key=lambda x: x["d"])
     far = tmp[int(len(tmp)*0.95)//1 ]
     B,c = far["row"], far["d"]
@@ -32,7 +33,7 @@ def half(data, rows= None, cols = None ,above = None):
                 left.append(two["row"])
             else:
                 right.append(two["row"])
-    return left, right, A, B, c, 1
+    return left, right, A, B, c, evals
 
 def tree(data, rows=None, cols=None, above=None):
     rows = rows if rows else data.rows
