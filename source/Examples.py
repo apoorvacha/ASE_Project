@@ -48,9 +48,9 @@ def test_xyz():
     n_evals = {"all": 0, "sway": 0, "xpln": 0, "sway2":0,"xpln2": 0,"top": 0}
 
 
-    runs = 0
+    count = 0
     data=None
-    while runs < n_iter:
+    while count < n_iter:
         data = Data(file)
        
         the["rest"] = 4 
