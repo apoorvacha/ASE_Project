@@ -35,10 +35,11 @@ def bins(cols, rowss):
             if   type(col.col) == Sym:
                 out.append(ranges) 
             else:
-                out.append(mergeAny(ranges, n/16, 0.35*col.col.div()))
+                out.append(mergeAny(ranges))
 
     return out
 
+# We can change the number of bins
 def bin(col, x):
 
     if x=="?" or hasattr(col, "isSym"):
@@ -53,7 +54,7 @@ def bin(col, x):
 min = -float("inf")
 max = float("inf")
 
-def mergeAny(ranges0,nSmall,nFar):
+def mergeAny(ranges0):
 
     def noGaps(t):
         if not t:
@@ -66,7 +67,7 @@ def mergeAny(ranges0,nSmall,nFar):
 
 
     def try2Merge(left,right,j):
-        y = merged(left.y, right.y, nSmall, nFar)
+        y = merged(left.y, right.y)
         if y: 
             j = j+1 
             left.hi, left.y = right.hi, y 
@@ -79,20 +80,14 @@ def mergeAny(ranges0,nSmall,nFar):
             j,left = try2Merge(left, ranges0[j+1], j)
         j=j+1
         ranges1.append(left)
-    return noGaps(ranges0) if len(ranges0)==len(ranges1) else mergeAny(ranges1,nSmall,nFar)
+    return noGaps(ranges0) if len(ranges0)==len(ranges1) else mergeAny(ranges1)
 
 
-def merged(col1,col2,nSmall, nFar):
-    new = merge2(col1,col2)
-    if nSmall and col1.n < nSmall or col2.n < nSmall:
-        return new
-    if col2.n < nSmall:
-        return new
-    if nFar   and not type(col1) == Sym and abs(col1.div() - col2.div()) < nFar:
-        return new
-    if new.div() <= (col1.div()*col1.n + col2.div()*col2.n)/new.n:
-        return new
+def merged(col1,col2):
+    new = merge2(col1, col2)
 
+    if div(new) <= (div(col1)*col1.n + div(col2)*col2.n)/new.n:
+        return new
 
 def merge2(col1, col2):
 

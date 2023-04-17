@@ -3,8 +3,6 @@ from Start import the
 from Cluster import half
 import Data
 
-
-
 def sway(data, reuse,halves = 512):
       def worker(rows, worse, evals0, above = None):
         if len(rows) <= len(data.rows)**(0.5):

@@ -26,6 +26,7 @@ def div(col):
         e = 0
         for n in col.has.values():
             e = e - n/col.n * math.log(n/col.n, 2)
+        return e
     else:
         return (Misc.per(has(col),.9) - Misc.per(has(col), .1)) / 2.58
 
