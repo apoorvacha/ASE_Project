@@ -13,6 +13,7 @@ import io,re
 import time
 from Start import the
 from Misc import *
+from collections import defaultdict
 
 def readCSV(src, fun):
     with open(src, mode='r') as file:
@@ -23,18 +24,22 @@ def readCSV(src, fun):
                 t.append(coerce(s1))
             fun(t)
         
-def get_stats(arr):
+def get_stats(arr, model_name, stat_dic):
     res = {}
     for item in arr:
         stats = Query.stats(item)
+        print("Stats:", model_name, stats)
         for k,v in stats.items():
             res[k] = res.get(k,0) + v
+            if k in stat_dic:
+                stat_dic[k][model_name].append(v)
+
     for k,v in res.items():
-        res[k] /= 512
-    return res
+        res[k] /= 20
+    return res, stat_dic
 
 def test_xyz():
-    n_iter = 2
+    n_iter = 20
     file = "../etc/Data1/auto2.csv"
     file = str((file))
 
@@ -46,12 +51,17 @@ def test_xyz():
                     [["sway", "top"],None]]
                 
     n_evals = {"all": 0, "sway": 0, "xpln": 0, "sway2":0,"xpln2": 0,"top": 0}
+    stats_rx = defaultdict(defaultdict)
 
 
     count = 0
     data=None
     while count < n_iter:
+        the["seed"] = random.randint(1, 999999999)
         data = Data(file)
+        for col in data.cols.y:
+            if col.col.txt not in stats_rx:
+                stats_rx[col.col.txt] = defaultdict(list)
        
         the["rest"] = 4 
         reuse =True
@@ -59,6 +69,8 @@ def test_xyz():
 
         best,rest,evals_sway = optimize.sway(data, reuse, halves)
         the["rest"] = 8 
+        reuse =False
+        halves = 1024
         
         best2,rest2,evals_sway2 = optimize.sway(data, reuse,  halves)
 
@@ -113,7 +125,7 @@ def test_xyz():
         top_table = []
         for k,v in answer.items():
         
-            stats = get_stats(v)
+            stats, stats_rx = get_stats(v, k, stats_rx)
             stats_list = [k] + [stats[y] for y in titles]
             stats_list += [n_evals[k]/n_iter]
             
@@ -132,3 +144,14 @@ def test_xyz():
         for [base, diff], result in conjunction_table:
             conjunction.append([f"{base} to {diff}"] + result)
         print(tabulate(conjunction, headers=titles,numalign="right"))
+    
+    for key, val in stats_rx.items():
+        temp = []
+        for k, v in val.items():
+            # print("Printing list:", v)
+            temp.append(Misc.RX(v, k))
+        
+        sk = Misc.scottKnot(temp)
+        tiles_sk = Misc.tiles(sk)
+        for rx in tiles_sk:
+            print(rx["name"], rx["rank"], rx["show"])
