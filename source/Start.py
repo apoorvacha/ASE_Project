@@ -1,5 +1,5 @@
 import sys, getopt
-from Examples1 import *
+from Examples import *
 
 argumentList = sys.argv[1:]
 the = {"seed": 937162211, "dump": False, "halves":512, 
