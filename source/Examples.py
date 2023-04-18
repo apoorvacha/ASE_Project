@@ -1,16 +1,11 @@
-from Sym import Sym
 import Query
 from Data import *
 import Misc
-from pathlib import Path
-import os , csv
-import Update
-import Cluster, Discretization
+import csv
+import Discretization
 import Optimize as optimize
 from Query import *
 from tabulate import tabulate
-import io,re
-import time
 from Start import the
 from Misc import *
 from collections import defaultdict
@@ -25,24 +20,19 @@ def readCSV(src, fun):
             fun(t)
         
 def get_stats(arr, model_name, stat_dic):
-    res = {}
+    d = {}
     for item in arr:
         stats = Query.stats(item)
-        print("Stats:", model_name, stats)
         for k,v in stats.items():
-            res[k] = res.get(k,0) + v
+            d[k] = d.get(k,0) + v
             if k in stat_dic:
                 stat_dic[k][model_name].append(v)
 
-    for k,v in res.items():
-        res[k] /= 20
-    return res, stat_dic
+    for k,v in d.items():
+        d[k] /= the["n_iter"]
+    return d, stat_dic
 
-def test_xyz():
-    n_iter = 20
-    file = "../etc/Data1/auto2.csv"
-    file = str((file))
-
+def test_project():
     answer = {"all": [], "sway": [], "xpln": [], "sway2": [], "xpln2" : [], "top": []}
 
     conjunction_table = [[["all", "all"],None], 
@@ -50,15 +40,14 @@ def test_xyz():
                     [["sway", "xpln"],None],  
                     [["sway", "top"],None]]
                 
-    n_evals = {"all": 0, "sway": 0, "xpln": 0, "sway2":0,"xpln2": 0,"top": 0}
+    n_evals = {"all": 0, "sway": 0, "xpln": 0, "sway2":0, "xpln2": 0, "top": 0}
     stats_rx = defaultdict(defaultdict)
 
-
     count = 0
-    data=None
-    while count < n_iter:
+
+    while count < the["n_iter"]:
         the["seed"] = random.randint(1, 999999999)
-        data = Data(file)
+        data = Data(the["file"])
         for col in data.cols.y:
             if col.col.txt not in stats_rx:
                 stats_rx[col.col.txt] = defaultdict(list)
@@ -67,20 +56,20 @@ def test_xyz():
         reuse =True
         halves = 512
 
-        best,rest,evals_sway = optimize.sway(data, reuse, halves)
+        best, rest, evals_sway = optimize.sway(data, reuse, halves)
         the["rest"] = 8 
-        reuse =False
+        reuse = False
         halves = 1024
         
-        best2,rest2,evals_sway2 = optimize.sway(data, reuse,  halves)
+        best2, rest2, evals_sway2 = optimize.sway(data, reuse, halves)
 
-        conf_interval =0.05
+        conf_interval = 0.05
 
-        rule,_ = Discretization.xpln(data, best, rest, conf_interval)
-        rule2,_ = Discretization.xpln(data, best2, rest2, conf_interval)
+        rule, _ = Discretization.xpln(data, best, rest, conf_interval)
+        rule2, _ = Discretization.xpln(data, best2, rest2, conf_interval)
         
         if rule != -1:
-            data1= Data(data, Discretization.selects(rule, data.rows))
+            data1 = Data(data, Discretization.selects(rule, data.rows))
             data2 = Data(data, Discretization.selects(rule2, data.rows))
 
             answer['all'].append(data)
@@ -127,7 +116,7 @@ def test_xyz():
         
             stats, stats_rx = get_stats(v, k, stats_rx)
             stats_list = [k] + [stats[y] for y in titles]
-            stats_list += [n_evals[k]/n_iter]
+            stats_list += [n_evals[k]/the["n_iter"]]
             
             top_table.append(stats_list)
         

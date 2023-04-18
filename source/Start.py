@@ -1,8 +1,12 @@
 import sys, getopt
-from Examples import *
+from Examples1 import *
 
 argumentList = sys.argv[1:]
-the = {"seed": 937162211, "dump": False, "halves":"", "reuse":False , "go": "data", "help": False, "file": "/etc/data/repgrid1.csv","min": "min", "rest":4, "cohen":0.35, "width":40}
+the = {"seed": 937162211, "dump": False, "halves":512, 
+       "reuse":False , "go": "data", "help": False, 
+       "file": "../etc/Data1/auto2.csv","min": "min", 
+       "rest":4, "cohen":0.35, "width":40, "n_iter":5,
+       "conf_interval":0.05}
 
 b4={}
 ENV = {}
@@ -36,7 +40,7 @@ def help():
 def run_tests():
     func_pass= 0
     # test_suite = [test_nums, test_sym,test_the, test_half, test_csv, test_data,  test_clone, test_cliffs, test_tree,  test_dist, test_csv, test_sway, test_bins, test_explain] 
-    test_suite = [test_xyz]
+    test_suite = [test_project]
     for i,test in enumerate(test_suite):
         if(test()):
             func_pass += 1

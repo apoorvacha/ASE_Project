@@ -1,6 +1,6 @@
 import Query
 from Start import the
-from Data import Data
+from Data import *
 import Misc
 
 def half(data, reuse, halves, rows= None, cols = None ,above = None):
