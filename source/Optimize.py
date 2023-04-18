@@ -19,7 +19,7 @@ def worker(data, rows, worse, evals0, reuse, halves, above = None):
 def sway(data, reuse,halves = 512):
 
       best, rest , evals = worker(data, data.rows, [], 0, reuse, halves)
-      return Data.Data(data, best), Data.Data(data, rest), evals
+      return Data.Data(data, best), Data.Data(data, rest)
     #   return data.clone(data, best), data.clone(data, rest), evals
 
 
@@ -32,4 +32,4 @@ def sway2(data, reuse,halves = 512):
     
     best_all, rest_all, evals  = worker(data, best1 + best2 + best3 + best4, [] ,0, reuse, halves)
 
-    return Data.Data(data, best_all), Data.Data(data, rest_all), evals
+    return Data.Data(data, best_all), Data.Data(data, rest_all)

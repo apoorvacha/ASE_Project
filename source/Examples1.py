@@ -10,7 +10,7 @@ from Start import the
 from Misc import *
 from collections import defaultdict
 
-count = 0
+iterations = 0
 
 def readCSV(src, fun):
     with open(src, mode='r') as file:
@@ -39,7 +39,7 @@ def get_data(algorithm, answer, data, halves, reuse, conf_interval):
 
     if algorithm == "baseline":
 
-        best, rest, evals_sway = optimize.sway(data, reuse, halves)
+        best, rest = optimize.sway(data, reuse, halves)
         rule, _ = Discretization.xpln(data, best, rest, conf_interval)
 
         answer['all'].append(data)
@@ -47,7 +47,6 @@ def get_data(algorithm, answer, data, halves, reuse, conf_interval):
             data1 = Data(data, Discretization.selects(rule, data.rows))
 
             answer['sway'].append(best)
-            print("value at best",type(best))
             answer['xpln'].append(data1)
 
             top2, _ = Query.betters(best)
@@ -57,12 +56,11 @@ def get_data(algorithm, answer, data, halves, reuse, conf_interval):
             flag = True
        
     else:
-        best, rest, evals_sway = optimize.sway2(data, reuse, halves)
+        best, rest = optimize.sway2(data, reuse, halves)
         rule, _ = Discretization.xpln(data, best, rest, conf_interval)
 
         if rule:
             data1 = Data(data, Discretization.selects(rule, data.rows))
-            # data2 = Data(data, Discretization.selects(rule2, data.rows))
 
             answer['sway2'].append(best)
             answer['xpln2'].append(data1)
@@ -72,9 +70,9 @@ def get_data(algorithm, answer, data, halves, reuse, conf_interval):
     return flag
 
 def update_conj_table(table, answer, data):
-    global count
+    global iterations
     for i in range(len(table)):
-        [base, diff], result = table[i]
+        [comp1, comp2], result = table[i]
 
         if not result:
             table[i][1] = ["=" for _ in range(len(data.cols.y))]
@@ -82,17 +80,26 @@ def update_conj_table(table, answer, data):
         for k in range(len(data.cols.y)):
     
             if table[i][1][k] == "=":
-            
-                base_y, diff_y = answer[base][count].cols.y[k].col, answer[diff][count].cols.y[k].col
-                equals = Misc.bootstrap(base_y.check(), diff_y.check()) and Misc.cliffs_delta(base_y.check(), diff_y.check())
-                # if base == diff:
-                #     print("CHECKING FOR ALL TO ALL:", equals)
-                if not equals:
-                    if i == 0:
-                        print("WARNING: all to all {} {} {}".format(i, k, "false"))
-                        print(f"all to all conjunction_table failed for {answer[base][count].cols.y[k].col.txt}")
+                # print(len(answer[comp1]))
+                comp1_val, comp2_val = answer[comp1][len(answer[comp1])-1].cols.y[k].col, answer[comp2][len(answer[comp2])-1].cols.y[k].col
+                # comp1_val, comp2_val = answer[comp1][iterations].cols.y[k].col, answer[comp2][iterations].cols.y[k].col
+                check1 = Misc.bootstrap(comp1_val.check(), comp2_val.check()) 
+                check2 = Misc.cliffs_delta(comp1_val.check(), comp2_val.check())
+                if not (check1 and check2):
+                    # if i == 0:
+                    #     print("WARNING: all to all {} {} {}".format(i, k, "false"))
+                    #     print(f"all to all conjunction_table failed for {answer[comp2][iterations].cols.y[k].col.txt}")
                     table[i][1][k] = "≠"
-    count += 1
+    iterations += 1
+top_table = []
+conjunction=[]
+def get_Table(titles,answer, stats_rx):
+        for k,v in answer.items():
+            stats, stats_rx = get_stats(v, k, stats_rx)
+            stats_list = [k] + [stats[y] for y in titles]
+                
+            top_table.append(stats_list)
+        return top_table
 
 def test_project():
     answer = {"all": [], "sway": [], "xpln": [], "sway2": [], "xpln2" : [], "top": []}
@@ -107,45 +114,39 @@ def test_project():
                     ]
                 
     stats_rx = defaultdict(defaultdict)
+    
+    data = Data(the["file"])
 
-    while count < the["n_iter"]:
-
-        the["seed"] = random.randint(1, 999999999)
-        data = Data(the["file"])
-        for col in data.cols.y:
+    for col in data.cols.y:
             if col.col.txt not in stats_rx:
                 stats_rx[col.col.txt] = defaultdict(list)
 
+    while iterations < the["n_iter"]:
+
+        the["seed"] = random.randint(1, 999999999)
         flag = get_data("baseline", answer, data, the["halves"], the["reuse"], the["conf_interval"])
         flag2 = get_data("new_model", answer, data, the["halves"], the["reuse"], the["conf_interval"])
-
-        if flag:
+        if flag and flag2:
             update_conj_table(conjunction_table, answer, data)
-
-        titles = [y.col.txt for y in data.cols.y]
-        top_table = []
-        for k,v in answer.items():
-            stats, stats_rx = get_stats(v, k, stats_rx)
-            stats_list = [k] + [stats[y] for y in titles]
-            
-            top_table.append(stats_list)
         
-        print(tabulate(top_table, headers=titles, numalign="left"))
-        print()
 
-        conjunction=[]
-    
-        for [base, diff], result in conjunction_table:
-            conjunction.append([f"{base} to {diff}"] + result)
-        print(tabulate(conjunction, headers=titles))
+    titles = [y.col.txt for y in data.cols.y]
+    print(" mean results over 20 repeated runs:")
+    print(tabulate(get_Table(titles, answer, stats_rx), headers=titles, numalign="left"))
+    print()
+    for [comp1, comp2], result in conjunction_table:
+        conjunction.append([f"{comp1} to {comp2}"] + result)
+    print("table shows the CONJUNCTION of a effect size test and a significance test that compares 20  results to 20 results from some other treatment")
+    print(" ")
+    print(tabulate(conjunction, headers=titles))
     
     for key, val in stats_rx.items():
         temp = []
         for k, v in val.items():
-            # print("Printing list:", v)
             temp.append(Misc.RX(v, k))
         
         sk = Misc.scottKnot(temp)
         tiles_sk = Misc.tiles(sk)
         for rx in tiles_sk:
             print(rx["name"], rx["rank"], rx["show"])
+    return True
