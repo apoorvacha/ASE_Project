@@ -266,7 +266,7 @@ def tiles(rxs):
             
         u[the['width'] // 2] = "|"
         u[C] = "*"
-        rx["show"] = "".join(u) + " { %6.2f" % a  + "}"
+        rx["show"] = "".join(u) + " { %6.2f" % a
         for x in (b, c, d, e):
             rx["show"] += ", %6.2f" % x
         rx["show"] += " }"

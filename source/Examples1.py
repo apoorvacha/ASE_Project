@@ -86,9 +86,6 @@ def update_conj_table(table, answer, data):
                 check1 = Misc.bootstrap(comp1_val.check(), comp2_val.check()) 
                 check2 = Misc.cliffs_delta(comp1_val.check(), comp2_val.check())
                 if not (check1 and check2):
-                    # if i == 0:
-                    #     print("WARNING: all to all {} {} {}".format(i, k, "false"))
-                    #     print(f"all to all conjunction_table failed for {answer[comp2][iterations].cols.y[k].col.txt}")
                     table[i][1][k] = "≠"
     iterations += 1
 top_table = []
@@ -103,7 +100,7 @@ def get_Table(titles,answer, stats_rx):
 
 def test_project():
     answer = {"all": [], "sway": [], "xpln": [], "sway2": [], "xpln2" : [], "top": []}
-
+    print('The code is running. Please wait.....')
     conjunction_table = [[["all", "all"], None], 
                     [["all", "sway"], None],
                     [["all", "sway2"], None],  
@@ -131,17 +128,18 @@ def test_project():
         
 
     titles = [y.col.txt for y in data.cols.y]
-    print(" mean results over 20 repeated runs:")
+    print(" \nThe mean results over 20 repeated runs:\n")
     print(tabulate(get_Table(titles, answer, stats_rx), headers=titles, numalign="left"))
     print()
     for [comp1, comp2], result in conjunction_table:
         conjunction.append([f"{comp1} to {comp2}"] + result)
-    print("table shows the CONJUNCTION of a effect size test and a significance test that compares 20  results to 20 results from some other treatment")
+    print("Table shows the CONJUNCTION of a effect size test and a significance test that compares 20  results to 20 results from some other treatment")
     print(" ")
     print(tabulate(conjunction, headers=titles))
-    
+    print()
     for key, val in stats_rx.items():
         temp = []
+        print('\nScott-Knott for Objective: ',key,'\n')
         for k, v in val.items():
             temp.append(Misc.RX(v, k))
         

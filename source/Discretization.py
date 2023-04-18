@@ -105,7 +105,7 @@ def merge2(col1, col2):
 
 
 def xpln(data, best, rest, conf_interval):
-    print('xpln called')
+    #print('xpln called')
     def v(has):
         return value(has, len(best.rows) , len(rest.rows), "best")
     def score(ranges):
@@ -123,10 +123,9 @@ def xpln(data, best, rest, conf_interval):
     tmp, maxSizes = [], {}
     for _, ranges in enumerate(bins(data.cols.x,{"best":best.rows, "rest":rest.rows})):
         maxSizes[ranges[0].txt] = len(ranges)
-        print("")
+        #print("")
 
         for _,range in enumerate(ranges):
-            print(range.txt, range.lo, range.hi)
             tmp.append({"range": range, "max": len(ranges), "val": v(range.y.has)})
    
     rule, most = firstN(sorted(tmp, key=lambda x: x["val"], reverse=True), score, conf_interval)

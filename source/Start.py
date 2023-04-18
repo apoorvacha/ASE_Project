@@ -5,7 +5,7 @@ argumentList = sys.argv[1:]
 the = {"seed": 937162211, "dump": False, "halves":512, 
        "reuse":False , "go": "data", "help": False, 
        "file": "../etc/Data1/auto2.csv","min": "min", 
-       "rest":4, "cohen":0.35, "width":40, "n_iter":5,
+       "rest":4, "cohen":0.35, "width":40, "n_iter":20,
        "conf_interval":0.05}
 
 b4={}
@@ -44,7 +44,7 @@ def run_tests():
     for i,test in enumerate(test_suite):
         if(test()):
             func_pass += 1
-    print("\nTotal Test Cases Passing: " + str(func_pass) + "\nTotal Test Cases Failing: " + str(len(test_suite)-func_pass))
+    #print("\nTotal Test Cases Passing: " + str(func_pass) + "\nTotal Test Cases Failing: " + str(len(test_suite)-func_pass))
     
 
 def main():
