@@ -57,7 +57,7 @@ def get_data(algorithm, answer, data, halves, reuse, conf_interval):
             flag = True
        
     else:
-        best, rest, evals_sway = optimize.sway(data, reuse, halves)
+        best, rest, evals_sway = optimize.sway2(data, reuse, halves)
         rule, _ = Discretization.xpln(data, best, rest, conf_interval)
 
         if rule:
