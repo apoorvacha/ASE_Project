@@ -1,6 +1,6 @@
 import Misc
 from Cols import COLS
-import Rows, Examples1
+import Rows, Examples
 import Update
 
 class Data:
@@ -10,7 +10,7 @@ class Data:
         self.cols = None
         #add = lambda t: Update.row(self, t)
         if isinstance(src, str):
-            Examples1.readCSV(src, self.add)
+            Examples.readCSV(src, self.add)
         else:
             self.cols = COLS(src.cols.names)
             if rows:
