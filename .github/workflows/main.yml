@@ -30,4 +30,4 @@ jobs:
           cd source
           pip install pytest
           pip install pytest-cov
-          pytest Examples.py
+          pytest Examples1.py
