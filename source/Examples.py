@@ -9,6 +9,7 @@ from tabulate import tabulate
 from Start import the
 from Misc import *
 from collections import defaultdict
+from xpln2 import *
 
 iterations = 0
 
@@ -57,16 +58,13 @@ def get_data(algorithm, answer, data, halves, reuse, conf_interval):
        
     else:
         best, rest = optimize.sway2(data, reuse, halves)
-        rule, _ = Discretization.xpln(data, best, rest, conf_interval)
+        #rule, _ = Discretization.xpln(data, best, rest, conf_interval)
+        best1 = xpln2(data,best,rest)
+        answer['sway2'].append(best)
+        answer['xpln2'].append(best1)
 
-        if rule:
-            data1 = Data(data, Discretization.selects(rule, data.rows))
-
-            answer['sway2'].append(best)
-            answer['xpln2'].append(data1)
-
-            flag = True
-        
+        flag = True
+    
     return flag
 
 def update_conj_table(table, answer, data):
@@ -85,7 +83,7 @@ def update_conj_table(table, answer, data):
                 # comp1_val, comp2_val = answer[comp1][iterations].cols.y[k].col, answer[comp2][iterations].cols.y[k].col
                 check1 = Misc.bootstrap(comp1_val.check(), comp2_val.check()) 
                 check2 = Misc.cliffs_delta(comp1_val.check(), comp2_val.check())
-                if not (check1 and check2):
+                if (check1 and check2):
                     table[i][1][k] = "≠"
     iterations += 1
 top_table = []
