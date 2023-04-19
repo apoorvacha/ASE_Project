@@ -32,4 +32,4 @@ jobs:
           pip install pytest
           pip install tabulate
           pip install pytest-cov
-          pytest Examples1.py
+          pytest Examples.py
