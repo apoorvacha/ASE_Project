@@ -24,15 +24,15 @@ def readCSV(src, fun):
         
 def get_stats(arr, model_name, stat_dic):
     d = {}
-    for item in arr:
-        stats = Query.stats(item)
-        for k,v in stats.items():
-            d[k] = d.get(k,0) + v
-            if k in stat_dic:
-                stat_dic[k][model_name].append(v)
+    for val in arr:
+        stats = Query.stats(val)
+        for key,value in stats.items():
+            d[key] = d.get(key,0) + value
+            if key in stat_dic:
+                stat_dic[key][model_name].append(value)
 
-    for k,v in d.items():
-        d[k] /= the["n_iter"]
+    for key,val in d.items():
+        d[key] /= the["iterations"]
     return d, stat_dic
 
 def get_data(algorithm, answer, data, halves, reuse, conf_interval):
@@ -50,8 +50,8 @@ def get_data(algorithm, answer, data, halves, reuse, conf_interval):
             answer['sway'].append(best)
             answer['xpln'].append(data1)
 
-            top2, _ = Query.betters(best)
-            top = Data(data, top2)
+            top, _ = Query.betters(best)
+            top = Data(data, top)
             answer['top'].append(top)
 
             flag = True
@@ -73,39 +73,41 @@ def update_conj_table(table, answer, data):
         [comp1, comp2], result = table[i]
 
         if not result:
-            table[i][1] = ["=" for _ in range(len(data.cols.y))]
+            table[i][1] = ["="]*len(data.cols.y)
 
         for k in range(len(data.cols.y)):
     
             if table[i][1][k] == "=":
                 # print(len(answer[comp1]))
-                comp1_val, comp2_val = answer[comp1][len(answer[comp1])-1].cols.y[k].col, answer[comp2][len(answer[comp2])-1].cols.y[k].col
-                # comp1_val, comp2_val = answer[comp1][iterations].cols.y[k].col, answer[comp2][iterations].cols.y[k].col
+                comp1_val = answer[comp1][len(answer[comp1])-1].cols.y[k].col
+                comp2_val = answer[comp2][len(answer[comp2])-1].cols.y[k].col
                 check1 = Misc.bootstrap(comp1_val.check(), comp2_val.check()) 
                 check2 = Misc.cliffs_delta(comp1_val.check(), comp2_val.check())
                 if (check1 and check2):
                     table[i][1][k] = "≠"
     iterations += 1
-top_table = []
+
 conjunction=[]
+
 def get_Table(titles,answer, stats_rx):
-        for k,v in answer.items():
-            stats, stats_rx = get_stats(v, k, stats_rx)
-            stats_list = [k] + [stats[y] for y in titles]
+        final_table = []
+        for key,val in answer.items():
+            stats, stats_rx = get_stats(val, key, stats_rx)
+            stats_list = [key] + [stats[y] for y in titles]
                 
-            top_table.append(stats_list)
-        return top_table
+            final_table.append(stats_list)
+        return final_table
 
 def test_project():
     answer = {"all": [], "sway": [], "xpln": [], "sway2": [], "xpln2" : [], "top": []}
     print('The code is running. Please wait.....')
-    conjunction_table = [[["all", "all"], None], 
-                    [["all", "sway"], None],
-                    [["all", "sway2"], None],  
-                    [["sway", "sway2"], None],  
-                    [["sway", "xpln"], None],
-                    [["sway2", "xpln2"], None],
-                    [["sway", "top"], None],
+    conjunction_table = [[("all", "all"), None], 
+                    [("all", "sway"), None],
+                    [("all", "sway2"), None],  
+                    [("sway", "sway2"), None],  
+                    [("sway", "xpln"), None],
+                    [("sway2", "xpln2"), None],
+                    [("sway", "top"), None],
                     ]
                 
     stats_rx = defaultdict(defaultdict)
@@ -116,7 +118,7 @@ def test_project():
             if col.col.txt not in stats_rx:
                 stats_rx[col.col.txt] = defaultdict(list)
 
-    while iterations < the["n_iter"]:
+    while iterations < the["iterations"]:
 
         the["seed"] = random.randint(1, 999999999)
         flag = get_data("baseline", answer, data, the["halves"], the["reuse"], the["conf_interval"])
