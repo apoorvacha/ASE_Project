@@ -29,9 +29,9 @@ class Sym:
         return self.mode
 
     def div(self):
+        e = 0
         def fun(p):
             return p*math.log(p,2)
-        e = 0
         for k, v in self.has.items():
             e = e + fun(v/self.n)
         return -e

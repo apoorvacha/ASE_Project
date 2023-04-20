@@ -7,8 +7,6 @@ def worker(data, rows, worse, evals0, reuse, halves, above = None):
     if len(rows) <= len(data.rows)**(0.5):
         return rows, List.many(worse, the["rest"] * len(rows)), evals0
     else:
-        # l , r, A, B,c, evals = half(data, rows, None,  above)
-        # l , r, A, B,c, evals = half(data, rows, None,  above)
         l , r, A, B,c, evals = half(data, reuse, halves, rows, None,  above)
         if Query.better(data, B, A):
             l, r, A, B = r, l, B, A
@@ -20,7 +18,6 @@ def sway(data, reuse,halves = 512):
 
       best, rest , evals = worker(data, data.rows, [], 0, reuse, halves)
       return Data.Data(data, best), Data.Data(data, rest)
-    #   return data.clone(data, best), data.clone(data, rest), evals
 
 
 def sway2(data, reuse,halves = 512):

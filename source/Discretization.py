@@ -160,7 +160,12 @@ def showRule(rule):
     def merge(t0):
         t, j = [], 0
         while j < len(t0):
-            left, right = (t0[j], t0[j+1]) if j+1 < len(t0) else (t0[j], None)
+            left = t0[j]
+            try:
+                right = t0[j+1]
+            except:
+                right = None
+            
             if right and left['hi'] == right['lo']:
                 left['hi'] = right['hi']
                 j += 1

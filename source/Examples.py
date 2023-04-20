@@ -21,19 +21,6 @@ def readCSV(src, fun):
             for s1 in row:
                 t.append(coerce(s1))
             fun(t)
-        
-def get_stats(arr, model_name, stat_dic):
-    d = {}
-    for val in arr:
-        stats = Query.stats(val)
-        for key,value in stats.items():
-            d[key] = d.get(key,0) + value
-            if key in stat_dic:
-                stat_dic[key][model_name].append(value)
-
-    for key,val in d.items():
-        d[key] /= the["iterations"]
-    return d, stat_dic
 
 def get_data(algorithm, answer, data, halves, reuse, conf_interval):
     flag = False
@@ -67,12 +54,25 @@ def get_data(algorithm, answer, data, halves, reuse, conf_interval):
     
     return flag
 
+def get_stacts(arr, model_name, stat_dic):
+    d = {}
+    for val in arr:
+        stats = Query.stats(val)
+        for key,value in stats.items():
+            d[key] = d.get(key,0) + value
+            if key in stat_dic:
+                stat_dic[key][model_name].append(value)
+
+    for key,val in d.items():
+        d[key] /= the["iterations"]
+    return d, stat_dic
+
 def update_conj_table(table, answer, data):
     global iterations
     for i in range(len(table)):
-        [comp1, comp2], result = table[i]
+        [comp1, comp2], res = table[i]
 
-        if not result:
+        if not res:
             table[i][1] = ["="]*len(data.cols.y)
 
         for k in range(len(data.cols.y)):
@@ -81,18 +81,18 @@ def update_conj_table(table, answer, data):
                 # print(len(answer[comp1]))
                 comp1_val = answer[comp1][len(answer[comp1])-1].cols.y[k].col
                 comp2_val = answer[comp2][len(answer[comp2])-1].cols.y[k].col
-                check1 = Misc.bootstrap(comp1_val.check(), comp2_val.check()) 
-                check2 = Misc.cliffs_delta(comp1_val.check(), comp2_val.check())
+                check1 = Misc.bootstrap(comp1_val.checkSort(), comp2_val.checkSort()) 
+                check2 = Misc.cliffs_delta(comp1_val.checkSort(), comp2_val.checkSort())
                 if (check1 and check2):
                     table[i][1][k] = "≠"
     iterations += 1
 
 conjunction=[]
 
-def get_table(titles,answer, stats_rx):
+def get_Table(titles,answer, stats_rx):
         final_table = []
         for key,val in answer.items():
-            stats, stats_rx = get_stats(val, key, stats_rx)
+            stats, stats_rx = get_stacts(val, key, stats_rx)
             stats_list = [key] + [stats[y] for y in titles]
                 
             final_table.append(stats_list)
@@ -107,8 +107,7 @@ def test_project():
                     [("sway", "sway2"), None],  
                     [("sway", "xpln"), None],
                     [("sway2", "xpln2"), None],
-                    [("sway", "top"), None],
-                    ]
+                    [("sway", "top"), None]]
                 
     stats_rx = defaultdict(defaultdict)
     
@@ -129,7 +128,7 @@ def test_project():
 
     titles = [y.col.txt for y in data.cols.y]
     print(" \nThe mean results over 20 repeated runs:\n")
-    print(tabulate(get_table(titles, answer, stats_rx), headers=titles, numalign="left"))
+    print(tabulate(get_Table(titles, answer, stats_rx), headers=titles, numalign="left"))
     print()
     for [comp1, comp2], result in conjunction_table:
         conjunction.append([f"{comp1} to {comp2}"] + result)
@@ -142,7 +141,7 @@ def test_project():
         print('\nScott-Knott for Objective: ',key,'\n')
         for k, v in val.items():
             temp.append(Misc.RX(v, k))
-        print("Printing temp:", temp)
+        
         sk = Misc.scottKnot(temp)
         tiles_sk = Misc.tiles(sk)
         for rx in tiles_sk:

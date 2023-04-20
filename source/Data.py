@@ -20,17 +20,12 @@ class Data:
     def add(self, t):
 
         if self.cols:
-            t = t if isinstance(t, Rows.Rows) else Rows.Rows(t)
+            if isinstance(t, Rows.Rows):
+                t = t
+            else:
+                t = Rows.Rows(t)
 
             self.rows.append(t)
             self.cols.add(t)
         else:
             self.cols = COLS(t)
-
-    def clone(self, data, ts=None):
-        data1 = Update.row(Data(), data.cols.names)
-        # for t in ts or []:
-        for t in (ts or []):
-            Update.row(data1, t)
-        return data1
-

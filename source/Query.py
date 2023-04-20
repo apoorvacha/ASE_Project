@@ -113,13 +113,13 @@ def better(data,row1,row2, s1 =0, s2 =0):
         x = norm(col.col, row1.cells[col.col.at])
         y = norm(col.col, row2.cells[col.col.at])
         # print("txt in btter",col.col.txt)
-        s1 = s1 - math.exp(col.col.w * (x - y) / len(ys))
-        s2 = s2 - math.exp(col.col.w * (y - x) / len(ys))
+        s1 = s1 - math.exp(col.col.w * (x - y)/len(ys))
+        s2 = s2 - math.exp(col.col.w * (y - x)/len(ys))
     return s1/len(ys) < s2/len(ys) 
 
 #functools.cmp_to_key(func)
 # Transform an old-style comparison function to a key function. Used with tools that 
 # accept key functions (such as sorted(), min(), max(), heapq.nlargest(), heapq.nsmallest(), itertools.groupby()).
 def betters(data, n=None):
-    tmp = sorted(data.rows, key=cmp_to_key(lambda row1, row2: -1 if better(data,row1, row2) else 1))
+    tmp = sorted(data.rows, key=cmp_to_key(lambda r1, r2: -1 if better(data,r1, r2) else 1))
     return tmp[1:n], tmp[n+1:] if n else tmp

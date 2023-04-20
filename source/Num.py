@@ -2,7 +2,7 @@ import math
 import Misc
 
 class Num:
-    def __init__(self, at=0, txt="", t=None):
+    def __init__(self, at=0, txt=""):
         self.at = at
         self.txt = txt
         self.n = 0
@@ -14,10 +14,6 @@ class Num:
         self.has = {}
         self.w = -1 if '-' in self.txt else 1 
         self.sd = 0
-    
-        if t:
-            for i in t:
-                self.add(i)
 
     def add(self, x):
         if x != "?":
@@ -42,10 +38,12 @@ class Num:
             self.m2 = self.m2 + d*(x-self.mu)
             self.sd = 0 if self.n<2 else (self.m2/(self.n - 1))**.5
 
-    def check(self):
-        ret = dict(sorted(self.has.items(), key=lambda x: x[1]))
+    def checkSort(self):
         self.ok = True
-        return list(ret.values())
+        A =sorted(self.has.items(), key=lambda x: x[1])
+        A = dict(A)
+        B = list(A.values())
+        return B
     
     def mid(self):
         return self.mu

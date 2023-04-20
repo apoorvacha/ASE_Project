@@ -154,13 +154,29 @@ def bootstrap(y0, z0):
     tobs = delta(y, z)
     n = 0
     for i in range(512):
-        p = Num(samples(yhat))
-        if (delta(Num(t=samples(yhat)), Num(t=samples(zhat))) > tobs):
+        num1= Num()
+        for val in samples(yhat):
+            num1.add(val)
+        num2 = Num()
+        for val in samples(zhat):
+            num2.add(val)
+        
+        if (delta(num1, num2) > tobs):
             n += 1
     return n / 512 >= 0.05
-
+# local function cliffsDelta(ns1,ns2) --> bool; true if different by a trivial amount
+#   local n,gt,lt = 0,0,0
+#   if #ns1> 128 then ns1 = samples(ns1,128) end
+#   if #ns2> 128 then ns2 = samples(ns2,128) end
+#   for _,x in pairs(ns1) do
+#     for _,y in pairs(ns2) do
+#       n = n + 1
+#       if x > y then gt = gt + 1 end
+#       if x < y then lt = lt + 1 end end end
+#   return math.abs(lt - gt)/n <= the.cliff end
 def cliffs_delta(ns1, ns2):
-
+    n, gt, lt = 0, 0, 0
+    
     if len(ns1) > 256:
         ns1 = many(ns1, 256)
     if len(ns2) > 256:
@@ -170,7 +186,7 @@ def cliffs_delta(ns1, ns2):
     if len(ns2) > 10 * len(ns1):
         ns2 = many(ns2, 10 * len(ns1))
 
-    n, gt, lt = 0, 0, 0
+    
     for x in ns1:
         for y in ns2:
             n += 1

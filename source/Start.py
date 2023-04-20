@@ -4,8 +4,8 @@ from Examples import *
 argumentList = sys.argv[1:]
 the = {"seed": 937162211, "dump": False, "halves":512, 
        "reuse":False , "go": "data", "help": False, 
-       "file": "../etc/Data1/pom.csv","min": "min", 
-       "rest":4, "cohen":0.35, "width":40, "iterations":20,
+       "file": "../etc/Data1/SSM.csv","min": "min", 
+       "rest":4, "cohen":0.35, "width":50, "iterations":20,
        "conf_interval":0.05}
 
 b4={}
@@ -30,10 +30,10 @@ def help():
         -p  --p       distance coefficient   = 2
         -s  --seed    random number seed     = 937162211
         ACTIONS:
-        -g  the	show settings
-        -g  rand	generate, reset, regenerate same
-        -g  sym	check syms
-        -g  num	check nums
+        -g  the show settings
+        -g  rand    generate, reset, regenerate same
+        -g  sym check syms
+        -g  num check nums
         """
     print(a)
 
