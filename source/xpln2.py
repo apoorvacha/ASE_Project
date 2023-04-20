@@ -10,12 +10,13 @@ def xpln2(data, best, rest):
     training_data_Y = []
 
     all_data = [[row.cells[col.col.at] for col in data.cols.x] for row in data.rows]
+
     encoder = preprocessing.LabelEncoder()
     for i, col in enumerate(data.cols.x):
         if isinstance(col.col, Sym):
-            encoded_vals = encoder.fit_transform([x[i] for x in all_data])
+            encoded_col = encoder.fit_transform([x[i] for x in all_data])
             for j, val in enumerate(all_data):
-                val[i] = encoded_vals[j]
+                val[i] = encoded_col[j]
 
     flag = False
     for r in best.rows:
@@ -47,13 +48,13 @@ def xpln2(data, best, rest):
             flag = False
 
     encoder = preprocessing.LabelEncoder()
-    for i, col in enumerate(rest.cols.x):
+    for i, col in enumerate(data.cols.x):
         if isinstance(col.col, Sym):
             encoded_col = encoder.fit_transform([x[i] for x in training_data_X])
             for j, val in enumerate(training_data_X):
                 val[i] = encoded_col[j]
 
-    classifier = tree.DecisionTreeClassifier()
+    classifier = tree.DecisionTreeClassifier(max_depth=4)
     classifier.fit(training_data_X, training_data_Y)
 
     best = []

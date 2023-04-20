@@ -45,13 +45,24 @@ def get_data(algorithm, answer, data, halves, reuse, conf_interval):
        
     else:
         best, rest = optimize.sway2(data, reuse, halves)
-        #rule, _ = Discretization.xpln(data, best, rest, conf_interval)
-        best1 = xpln2(data,best,rest)
-        answer['sway2'].append(best)
-        answer['xpln2'].append(best1)
+        tmp = []
+        rule = defaultdict(list)
+        for _, ranges in enumerate(Discretization.bins(data.cols.x,{"best":best.rows, "rest":rest.rows})):
+            for _,range in enumerate(ranges):
+                tmp.append({"range": range, "max": len(ranges), "val": Query.value(range.y.has,len(best.rows) , len(rest.rows), "best")})
+   
+        range = sorted(tmp, key=lambda x: x["val"])[0]["range"]
+        rule[range.txt].append({"lo": range.lo, "hi": range.hi, "at": range.at})
+        
+        if rule:
+            best1 = Data(data, Discretization.selects(rule, data.rows))
+            best1 = xpln2(data,best1,rest)
+            
+            answer['sway2'].append(best)
+            answer['xpln2'].append(best1)
 
-        flag = True
-    
+            flag = True
+        
     return flag
 
 def get_stacts(arr, model_name, stat_dic):

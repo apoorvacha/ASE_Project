@@ -4,8 +4,8 @@ from Examples import *
 argumentList = sys.argv[1:]
 the = {"seed": 937162211, "dump": False, "halves":512, 
        "reuse":False , "go": "data", "help": False, 
-       "file": "../etc/Data1/SSM.csv","min": "min", 
-       "rest":4, "cohen":0.35, "width":50, "iterations":20,
+       "file": "../etc/Data1/china.csv","min": "min", 
+       "rest":4, "cohen":0.35, "width":50, "iterations":5,
        "conf_interval":0.05}
 
 b4={}
