@@ -155,6 +155,7 @@ def test_project():
         
         sk = Misc.scottKnot(temp)
         tiles_sk = Misc.tiles(sk)
-        for rx in tiles_sk:
-            print(rx["name"], rx["rank"], rx["show"])
+        if tiles_sk:
+            for rx in tiles_sk:
+                print(rx["name"], rx["rank"], rx["show"])
     return True

@@ -132,6 +132,8 @@ def o(t, isKeys=None):
 
 def delta(i, other):
     e, y, z = 1E-32, i, other
+    if z.n == 0:
+        z.n = 1
     return abs(y.mu - z.mu) / (math.sqrt(e + y.sd ** 2 / y.n + z.sd ** 2 / z.n))
 
 def samples(t, n = None):
@@ -290,6 +292,5 @@ def tiles(rxs):
                 rx["show"] += ", %6.2f" % x
             rx["show"] += " }"
         return rxs
-    except e:
-        print(e)
+    except:
         return None
