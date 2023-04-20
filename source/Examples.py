@@ -89,7 +89,7 @@ def update_conj_table(table, answer, data):
 
 conjunction=[]
 
-def get_Table(titles,answer, stats_rx):
+def get_table(titles,answer, stats_rx):
         final_table = []
         for key,val in answer.items():
             stats, stats_rx = get_stats(val, key, stats_rx)
@@ -129,7 +129,7 @@ def test_project():
 
     titles = [y.col.txt for y in data.cols.y]
     print(" \nThe mean results over 20 repeated runs:\n")
-    print(tabulate(get_Table(titles, answer, stats_rx), headers=titles, numalign="left"))
+    print(tabulate(get_table(titles, answer, stats_rx), headers=titles, numalign="left"))
     print()
     for [comp1, comp2], result in conjunction_table:
         conjunction.append([f"{comp1} to {comp2}"] + result)
@@ -142,7 +142,7 @@ def test_project():
         print('\nScott-Knott for Objective: ',key,'\n')
         for k, v in val.items():
             temp.append(Misc.RX(v, k))
-        
+        print("Printing temp:", temp)
         sk = Misc.scottKnot(temp)
         tiles_sk = Misc.tiles(sk)
         for rx in tiles_sk:
