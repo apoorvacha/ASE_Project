@@ -2,34 +2,42 @@ The code is running. Please wait.....
  
 The mean results over 20 repeated runs:
 
-       NUMBERITERATIONS-
------  -------------------
-all    30.9
-sway   9.305
-xpln   13.31
-sway2  6.505
-xpln2  23.885
-top    9.325
+       NUMBERITERATIONS-    TIMETOSOLUTION-
+-----  -------------------  -----------------
+all    30.9                 171.36
+sway   9.305                128.59
+xpln   13.31                102.92
+sway2  6.505                148.262
+xpln2  23.885               111.73
+top    9.325                65.91
 
 Table shows the CONJUNCTION of a effect size test and a significance test that compares 20  results to 20 results from some other treatment
  
-                NUMBERITERATIONS-
---------------  -------------------
-all to all      =
-all to sway     =
-all to sway2    =
-sway to sway2   =
-sway to xpln    ≠
-sway2 to xpln2  =
-sway to top     =
+                NUMBERITERATIONS-    TIMETOSOLUTION-
+--------------  -------------------  -----------------
+all to all      =                    =
+all to sway     ≠                    ≠
+all to sway2    ≠                    ≠
+sway to sway2   ≠                    ≠
+sway to xpln    ≠                    ≠
+sway2 to xpln2  ≠                    ≠
+sway to top     ≠                    ≠
 
 
 Scott-Knott for Objective:  NUMBERITERATIONS- 
 
-Printing temp: [{'name': 'all', 'rank': 0, 'n': 20, 'show': '', 'has': [30.9, 30.9, 30.9, 30.9, 30.9, 30.9, 30.9, 30.9, 30.9, 30.9, 30.9, 30.9, 30.9, 30.9, 30.9, 30.9, 30.9, 30.9, 30.9, 30.9]}, {'name': 'sway', 'rank': 0, 'n': 20, 'show': '', 'has': [4.1, 4.2, 4.3, 4.4, 4.7, 4.8, 4.9, 5.1, 5.1, 5.2, 5.3, 5.3, 5.4, 5.7, 6.8, 6.9, 7.0, 10.1, 11.9, 74.9]}, {'name': 'xpln', 'rank': 0, 'n': 20, 'show': '', 'has': [4.8, 8.0, 8.0, 8.3, 8.3, 8.3, 8.3, 8.3, 9.1, 9.2, 9.2, 9.2, 9.2, 10.5, 11.3, 14.0, 14.0, 15.3, 16.9, 76.0]}, {'name': 'sway2', 'rank': 0, 'n': 20, 'show': '', 'has': [4.2, 4.3, 4.3, 4.3, 4.4, 4.5, 4.5, 4.5, 4.6, 4.7, 4.7, 4.9, 5.1, 5.3, 5.4, 5.7, 5.7, 7.4, 9.0, 32.6]}, {'name': 'xpln2', 'rank': 0, 'n': 20, 'show': '', 'has': [6.4, 9.0, 10.6, 15.3, 17.8, 18.1, 20.0, 20.8, 21.5, 24.4, 25.5, 26.5, 27.0, 27.2, 28.5, 30.6, 32.9, 36.4, 38.6, 40.6]}, {'name': 'top', 'rank': 0, 'n': 20, 'show': '', 'has': [4.1, 4.2, 4.3, 4.4, 4.7, 4.8, 4.9, 5.1, 5.1, 5.2, 5.3, 5.3, 5.4, 5.7, 6.8, 6.9, 7.0, 10.2, 12.0, 75.1]}]
 sway2 1  *                  |                    {   4.30,   4.50,   4.70,   5.40,   9.00 }
 sway 1  *--                |                    {   4.30,   4.90,   5.30,   6.80,  11.90 }
 top 1  *--                |                    {   4.30,   4.90,   5.30,   6.80,  12.00 }
 xpln 2   * ---             |                    {   8.00,   8.30,   9.20,  11.30,  16.90 }
 xpln2 2    -----   * ------ |                    {  10.60,  20.00,  25.50,  28.50,  38.60 }
 all 2               *     |                    {  30.90,  30.90,  30.90,  30.90,  30.90 }
+
+Scott-Knott for Objective:  TIMETOSOLUTION- 
+
+sway2 1  *                  |                    {   148.20,   148.70,   150.40,   153.80,   160.00 }
+sway 1  -----      *       |           ----     {   148.60,   148.90,   156.30,   165.20,  165.40 }
+top 1         ----  *       |                  {   148.40,   150.50,   154.60,   159.20,  162.50 }
+xpln 2   * ---             |                    {   100.20,   102.70,   110.80,   112.70,  120.40 }
+xpln2 2 --       *    ---- |                    {  108.90,   112.40,   112.80,   115.20,  118.30 }
+all 2                    *     |                {  65.91,  65.91,  65.91,  65.91,  65.91 }
