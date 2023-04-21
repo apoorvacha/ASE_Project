@@ -196,7 +196,8 @@ def cliffs_delta(ns1, ns2):
                 gt += 1
             if x < y:
                 lt += 1
-
+    if n == 0:
+        n = 1
     return abs(lt - gt) / n > 0.147
 
 def diffs(nums1, nums2):
