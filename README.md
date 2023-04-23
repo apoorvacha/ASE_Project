@@ -7,7 +7,7 @@ Hrushabhsingh Chouhan, Vasu Agrawal, Apoorva Chauhan
 ![License](https://app.travis-ci.com/apoorvacha/ASE_HW1.svg?branch=master)
 ![License](https://img.shields.io/github/issues/apoorvacha/ASE_HW2?style=plastic)
 ![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.7562628.svg)
-[![Python application](https://github.com/apoorvacha/ASE_HW2/actions/workflows/python-app.yml/badge.svg)](https://github.com/apoorvacha/ASE_HW2/actions/workflows/main.yml)
+[![Python application](https://github.com/apoorvacha/ASE_project/actions/workflows/python-app.yml/badge.svg)](https://github.com/apoorvacha//actions/workflows/main.yml)
 
 
 ## Instructions to run the project 
