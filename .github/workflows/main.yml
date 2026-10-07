@@ -1,36 +1,28 @@
-# This workflow will install Python dependencies, run tests and lint with a single version of Python
-# For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-python
-
 name: Python application
 
 on:
   push:
-    branches: [ "main" ]
+    branches: [ "main", "feature/llm-analysis" ]
   pull_request:
     branches: [ "main" ]
 
 permissions:
   contents: read
 
-
-
 jobs:
   build:
-
     runs-on: ubuntu-latest
-
     steps:
-    - uses: actions/checkout@v3
-    - name: Set up Python 3
-      uses: actions/setup-python@v3
+    - uses: actions/checkout@v4
+    - name: Set up Python
+      uses: actions/setup-python@v5
       with:
-        python-version: "3"
-    
-    - name: Test with pytest
+        python-version: "3.11"
+    - name: Install dependencies
       run: |
-          cd source
-          pip install pytest
-          pip install tabulate
-          pip install pytest-cov
-          pip install scikit-learn
-          pytest Examples.py
+        python -m pip install --upgrade pip
+        pip install pytest pytest-cov tabulate scikit-learn
+    - name: Run test suite with coverage
+      run: |
+        cd source
+        pytest Examples.py test_llm_analyzer.py --cov=. --cov-report=term-missing

@@ -25,3 +25,38 @@ Note : enter the file path on the next line after "python3 Start.py -g" and give
 
 ### Github Actions
 You can also check the result in Github Actions for the file you uploaded. 
+
+
+## LLM analysis extension
+
+The project includes an optional LLM explanation layer in `source/LLMAnalyzer.py`. It accepts structured results produced by the optimization/ML pipeline and requests a concise explanation that is grounded only in those supplied results.
+
+### Configuration
+
+No API key is stored in the repository. Configure the provider at runtime:
+
+```bash
+export LLM_API_KEY="..."
+export LLM_BASE_URL="https://api.openai.com/v1"   # any compatible endpoint
+export LLM_MODEL="gpt-4o-mini"
+```
+
+The client uses a streaming chat-completions request and records:
+- time to first token (TTFT)
+- total response latency
+- completion token count
+- output token throughput (tokens/second)
+- request success/failure and provider errors
+
+### QA strategy
+
+`source/test_llm_analyzer.py` mocks the provider, so CI requires neither credentials nor paid API calls. Tests verify prompt grounding, missing-credential behavior, streamed output and metrics, and provider-failure handling.
+
+Run:
+
+```bash
+cd source
+pytest Examples.py test_llm_analyzer.py --cov=. --cov-report=term-missing
+```
+
+GitHub Actions runs the same suite for pushes and pull requests.
